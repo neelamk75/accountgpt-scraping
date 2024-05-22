@@ -42,6 +42,7 @@ class MySpider(Spider):
             if any_url_processed:
                 queries_processed_count += 1
 
+
     def parse(self, response):
         query = response.meta['query']
         url = response.meta['url']
@@ -64,21 +65,29 @@ class MySpider(Spider):
             r.hset(REDIS_PROCESSED_URL, query, json.dumps(processed_urls_data))
 
         soup = BeautifulSoup(response.text, 'html.parser')
-        headings = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
         content = ''
+        irrelevant_phrases = ['All Rights Reserved', ' All rights reserved', 'Privacy Policy', 'Terms of Use',
+                            'Join Our Mailing List', 'Related Information', 'Related Topics',
+                            'Footer', 'Subfooter', 'Contact us',
+                            'An official website of the United States government.',
+                            'Follow us']
+
+        def is_irrelevant(text):
+            return any(phrase in text for phrase in irrelevant_phrases)
+
+        headings = soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])
         for heading in headings:
             heading_text = heading.get_text().strip()
-            content += f"# {heading_text}\n\n"
-            # Find paragraphs associated with the current heading
-            for sibling in heading.find_all_next():
-                if sibling.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
-                    break
-                if sibling.name == 'p':
-                    paragraph_text = sibling.get_text().strip()
-                    if paragraph_text:
-                        content += f"{paragraph_text}\n\n"
+            if not is_irrelevant(heading_text):
+                content += f"# {heading_text}\n\n" 
+                # Find paragraphs associated with the current heading
+                paragraphs = heading.find_all_next(['p'])
+                for paragraph in paragraphs:
+                    paragraph_text = paragraph.get_text().strip()
+                    if not is_irrelevant(paragraph_text) and paragraph_text:
+                        content += f"{paragraph_text}\n\n" 
 
-        self.process_content(query, url, content)
+        self.save_to_file(response.url, content)
         
 
     def process_content(self, query, url, content):
