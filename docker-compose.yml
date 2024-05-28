@@ -3,10 +3,12 @@ version: '3.8'
 services:
   backend:
     build: .
-    container_name: scraping-pipeline
+    container_name: accountgpt-scrape
     restart: always
     ports:
-      - "8000:8000"  
+      - "8001:8001"  
+    networks:
+      - "redis"
 
   database:
     image: postgres
@@ -17,10 +19,18 @@ services:
       - POSTGRES_DB=accountgpt
       - POSTGRES_USER=accountgpt
       - POSTGRES_PASSWORD=accountgpt
+    networks:
+      - "redis"
 
   redis:
     image: redis:latest
     ports:
       - "6380:6379" 
+    networks:
+      - "redis"
+
+networks:
+  redis:
+    external: true
 
   
