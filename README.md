@@ -5,8 +5,8 @@
 
 ### To run with vector db update functionality,
 - Uncomment the import of *update_vector* and *update_vector task* inside beat schedule in **main.py**
-- Uncomment the *update_vector_db* task in **task.py**
-- Update **run_raptor.py** file to add relevant code to build the vector db
+- Uncomment the *update_vector_db* task in **tasks/task.py**
+- Update **update_vector/run_raptor.py** file to add relevant code to build the vector db
 
 
 ### This system uses google serp api to get urls for queries. 
