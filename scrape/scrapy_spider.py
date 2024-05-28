@@ -7,6 +7,7 @@ from core.config import REDIS_URL_HASH, REDIS_PROCESSED_URL, SCRAPY_SETTINGS
 from load_redis.redis_conn import r
 from bs4 import BeautifulSoup
 from core.config import OUTPUT_FILE
+import io
 
 
 class MySpider(Spider):
@@ -87,10 +88,10 @@ class MySpider(Spider):
                     if not is_irrelevant(paragraph_text) and paragraph_text:
                         content += f"{paragraph_text}\n\n" 
 
-        self.save_to_file(response.url, content)
+        self.process_content(response, content)
         
-
-    def process_content(self, query, url, content):
+    def process_content(self, response, content):
+        query = response.meta['query']
         query_hash = hashlib.sha256(query.encode('utf-8')).hexdigest()
         markdown_file_path = f'{OUTPUT_FILE}/{query_hash}.md'
         with open(markdown_file_path, 'a', encoding='utf-8') as markdown_file:
