@@ -1,21 +1,21 @@
 # Local Configurations
-PG_USER = "postgres"
-PG_PASSWORD = "pgs24"
-PG_HOST = "localhost"
-PG_PORT = "5433"
-PG_DB = "accountgpt"
-REDIS_HOST = "localhost"
-REDIS_PORT = "6379"
+# PG_USER = "postgres"
+# PG_PASSWORD = "pgs24"
+# PG_HOST = "localhost"
+# PG_PORT = "5433"
+# PG_DB = "accountgpt"
+# REDIS_HOST = "localhost"
+# REDIS_PORT = "6379"
 
 
 # Docker Configurations
-# PG_USER = "accountgpt"
-# PG_PASSWORD = "accountgpt"
-# PG_HOST = "database"
-# PG_PORT = "5432"
-# PG_DB = "accountgpt"
-# REDIS_HOST = "redis"
-# REDIS_PORT = "6380"
+PG_USER = "accountgpt"
+PG_PASSWORD = "accountgpt"
+PG_HOST = "database"
+PG_PORT = "5432"
+PG_DB = "accountgpt"
+REDIS_HOST = "redis"
+REDIS_PORT = "6379"
 
 
 # Common Configurations

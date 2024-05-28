@@ -18,7 +18,7 @@ class MySpider(Spider):
 
         for query_bytes in all_queries:
             # Scrape data for 10 queries
-            if queries_processed_count >= 10:
+            if queries_processed_count >= 5:
                 break
 
             query = query_bytes.decode('utf-8')
